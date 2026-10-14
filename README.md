@@ -1,16 +1,22 @@
 # HyperVision
 
-HyperVision is a resource-aware DBMS–OS laboratory project.
+HyperVision: A Resource-Aware DBMS–OS Laboratory Using Xen and Virtual Machine Introspection.
 
 ## Overview
-The project studies database query execution, resource monitoring,
-bottleneck detection, and performance recommendations.
+HyperVision is a project for studying database query execution, resource monitoring, bottleneck detection, and performance recommendations.
+
+## Features
+- SQL query processing
+- Query execution plans and performance measurements
+- CPU and memory monitoring
+- Bottleneck classification and recommendations
+- Simulated virtual machine monitoring
 
 ## Technologies
 - Python
 - Database Management Systems (DBMS)
 - Operating Systems (OS)
-- Simulated virtual machine monitoring
+- Virtualization concepts
 
 ## Team
 The Hypervisors
