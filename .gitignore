@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# generated at run time (create with: python backend/data/sample_data_generator.py)
+sample_data/*.csv
+logs/experiments.json
+
+# editors / OS
+.vscode/
+.idea/
+.DS_Store
