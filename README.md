@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # HyperVision — Mini DBMS + Resource-Aware Experiment Engine (Terminal Edition)
 
 A 5th-semester project implementing the DBMS + resource monitoring +
@@ -350,3 +351,6 @@ of inside a real hypervisor."
 - **CPU numbers look different on your machine** → the thresholds used
   for classification live at the top of `backend/analysis/classifier.py`
   as plain constants — adjust them if needed.
+=======
+# Hypervision
+>>>>>>> 1fd2a370e0cfdd5f0357cae459eb7cb66652fee0
