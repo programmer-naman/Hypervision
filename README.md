@@ -67,7 +67,6 @@ On the sample data, applying recommendations reduced latency and CPU time by app
 *Note: Actual improvements depend on the query, dataset, system resources, and applied optimization.*
 
 ## ⚙️ Installation and Setup
-
 ### Prerequisites
 
 - Python 3.8 or newer
@@ -76,7 +75,6 @@ On the sample data, applying recommendations reduced latency and CPU time by app
 ### 1. Clone the Repository
 
 Replace `YOUR_USERNAME` with your GitHub username.
-
 ```bash
 git clone https://github.com/YOUR_USERNAME/HyperVision.git
 cd HyperVision
@@ -97,7 +95,6 @@ python run.py
 On the first run, HyperVision offers to generate sample data files such as `sales.csv` and `orders.csv`. Press Enter to accept if prompted.
 
 ## 🕹️ How to Use
-
 Example commands:
 
 ```text
@@ -133,7 +130,6 @@ python run.py -q "SELECT region, COUNT(*) FROM sales GROUP BY region" --apply al
 ```
 
 ## 🖧 Virtual Machine Control
-
 HyperVision supports optional virtual machine resource management through Xen or KVM/libvirt. When configured for remote control, it sends resource adjustment commands to the host over SSH.
 
 Example using Xen:
