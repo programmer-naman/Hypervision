@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>HyperVision | DBMS &amp; Host Monitoring Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><span></span><span></span><span></span></div>
+        <div><strong>hypervision</strong><small>DBMS + MONITORING PLATFORM</small></div>
+      </div>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <button class="nav-item active" data-page="overview"><span class="nav-icon">▦</span> Overview</button>
+        <button class="nav-item" data-page="query"><span class="nav-icon">⌘</span> SQL Query Lab <span class="nav-pill">V3.0</span></button>
+        <button class="nav-item" data-page="monitoring"><span class="nav-icon">◉</span> System monitoring</button>
+        <button class="nav-item" data-page="database"><span class="nav-icon">▤</span> Database explorer</button>
+        <button class="nav-item" data-page="analysis"><span class="nav-icon">✳</span> Bottleneck analysis <span class="nav-dot"></span></button>
+        <button class="nav-item" data-page="experiments"><span class="nav-icon">⇄</span> Experiments</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="connection-card">
+          <div class="connection-top"><span class="status-dot"></span><span>Environment</span><span class="tag tag-demo" id="sidebarEnvTag">CONNECTED</span></div>
+          <strong id="sidebarBackendTitle">HyperVision Backend</strong>
+          <p id="sidebarBackendDesc">Mini DBMS Engine Ready</p>
+        </div>
+        <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span> Settings</button>
+        <div class="user-row">
+          <div class="avatar">HV</div>
+          <div class="user-info"><strong>HyperVision Lab</strong><small>Platform Console</small></div>
+          <span class="more">•••</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu" id="mobileMenu" aria-label="Toggle navigation">☰</button>
+          <div class="breadcrumbs"><span>Workspace</span><b>/</b><strong id="breadcrumbTitle">Overview</strong></div>
+        </div>
+        <div class="topbar-right">
+          <div class="demo-status"><span class="status-dot"></span> <span id="topbarStatusText">Connecting…</span></div>
+          <button class="icon-button" id="refreshBtn" title="Refresh metrics and data">↻</button>
+          <div class="top-avatar">HV</div>
+        </div>
+      </header>
+
+      <div class="content-wrap">
+        <!-- 1. OVERVIEW DASHBOARD -->
+        <div class="page-view active" id="page-overview">
+          <section class="page-heading">
+            <div>
+              <div class="eyebrow">INTEGRATED PLATFORM <span class="live-chip"><i></i> LIVE REALTIME</span></div>
+              <h1>Welcome to <span>HyperVision.</span></h1>
+              <p>Real-time database performance, host metrics, VM telemetry, and bottleneck analysis.</p>
+            </div>
+            <div class="heading-actions">
+              <button class="button button-quiet" id="exportOverview">↓ Export report</button>
+              <button class="button button-primary" data-goto="query">＋ Run a query</button>
+            </div>
+          </section>
+
+          <section class="metric-grid">
+            <article class="metric-card">
+              <div class="metric-top"><span>Queries executed</span><span class="metric-icon purple">⌘</span></div>
+              <div class="metric-value" id="metricQueries">0</div>
+              <div class="metric-foot"><span class="trend up">● Active</span><span>persistent experiment log</span></div>
+              <div class="mini-bars" aria-hidden="true"><i style="height:24%"></i><i style="height:42%"></i><i style="height:34%"></i><i style="height:58%"></i><i style="height:47%"></i><i style="height:73%"></i><i style="height:64%"></i><i style="height:90%"></i><i style="height:68%"></i><i style="height:100%"></i></div>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-top"><span>Avg. query latency</span><span class="metric-icon blue">◷</span></div>
+              <div class="metric-value"><span id="metricLatency">—</span><small>ms</small></div>
+              <div class="metric-foot"><span class="trend neutral">● Measured</span><span>execution latency</span></div>
+              <div class="sparkline"><svg viewBox="0 0 180 40" preserveAspectRatio="none"><path class="spark-fill blue-fill" d="M0 32 L18 28 L36 30 L54 17 L72 24 L90 13 L108 19 L126 7 L144 14 L162 5 L180 10 L180 40 L0 40Z"/><path class="spark-stroke blue-stroke" d="M0 32 L18 28 L36 30 L54 17 L72 24 L90 13 L108 19 L126 7 L144 14 L162 5 L180 10"/></svg></div>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-top"><span>CPU utilization</span><span class="metric-icon orange">⌁</span></div>
+              <div class="metric-value"><span id="metricCpu">0</span><small>%</small></div>
+              <div class="metric-foot"><span class="trend neutral">● Real Host</span><span>psutil system sample</span></div>
+              <div class="progress-track"><span id="cpuProgress" style="width:0%"></span></div>
+              <div class="scale-labels"><span>0%</span><span>100%</span></div>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-top"><span>Memory usage</span><span class="metric-icon green">▥</span></div>
+              <div class="metric-value"><span id="metricMemory">0</span><small>MB</small></div>
+              <div class="metric-foot"><span class="trend neutral">● Process</span><span>RSS memory</span></div>
+              <div class="memory-visual"><div><span style="height:25%"></span><span style="height:36%"></span><span style="height:30%"></span><span style="height:54%"></span><span style="height:48%"></span><span style="height:62%"></span><span style="height:58%"></span><span style="height:74%"></span><span style="height:68%"></span><span style="height:80%"></span><span style="height:72%"></span><span style="height:90%"></span></div></div>
+            </article>
+          </section>
+
+          <section class="dashboard-grid">
+            <article class="panel performance-panel">
+              <div class="panel-heading">
+                <div><h2>Query performance</h2><p>Execution latency over recent runs</p></div>
+                <div class="panel-actions">
+                  <span class="legend-dot purple-dot"></span><span class="legend-label">Latency (ms)</span>
+                  <select id="performanceRange" class="select-small">
+                    <option value="7">Last 7 runs</option>
+                    <option value="12">Last 12 runs</option>
+                  </select>
+                </div>
+              </div>
+              <div class="chart-wrap">
+                <div class="y-axis" id="performanceYAxis"><span>100</span><span>75</span><span>50</span><span>25</span><span>0</span></div>
+                <div class="chart-main">
+                  <div class="chart-gridlines"><i></i><i></i><i></i><i></i><i></i></div>
+                  <svg id="performanceChart" viewBox="0 0 700 230" preserveAspectRatio="none" role="img" aria-label="Query latency chart"></svg>
+                  <div class="x-axis" id="performanceLabels"></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel resource-panel">
+              <div class="panel-heading">
+                <div><h2>Resource allocation</h2><p>Live host snapshot</p></div>
+                <span class="tag tag-demo">HOST</span>
+              </div>
+              <div class="resource-donut-wrap">
+                <div class="donut" id="resourceDonut">
+                  <div class="donut-center"><strong id="donutCpuText">0%</strong><span>CPU used</span></div>
+                </div>
+              </div>
+              <div class="resource-legend">
+                <div><span class="legend-swatch swatch-purple"></span><span>CPU utilization</span><strong id="legendCpu">0%</strong></div>
+                <div><span class="legend-swatch swatch-blue"></span><span>Memory pressure</span><strong id="legendMemory">0%</strong></div>
+                <div><span class="legend-swatch swatch-muted"></span><span>Available memory headroom</span><strong id="legendHeadroom">100%</strong></div>
+              </div>
+            </article>
+          </section>
+
+          <section class="bottom-grid">
+            <article class="panel table-panel">
+              <div class="panel-heading">
+                <div><h2>Recent database queries</h2><p>Latest executed statements</p></div>
+                <button class="text-button" data-goto="query">Open query lab ↗</button>
+              </div>
+              <div class="table-scroll">
+                <table>
+                  <thead><tr><th>QUERY</th><th>TYPE</th><th>LATENCY</th><th>ROWS</th><th>STATUS</th></tr></thead>
+                  <tbody id="recentQueriesBody"></tbody>
+                </table>
+              </div>
+              <div class="panel-footer">
+                <span>Showing latest executions</span>
+                <button class="text-button" data-goto="experiments">View history →</button>
+              </div>
+            </article>
+
+            <article class="panel insights-panel">
+              <div class="panel-heading">
+                <div><h2>Bottleneck &amp; system insights</h2><p>Bottleneck signals and recommendations</p></div>
+                <span class="insight-count" id="overviewInsightCount">0</span>
+              </div>
+              <div id="overviewInsightsList">
+                <div class="schema-tip"><strong>Waiting for query data</strong><p>Run queries in the SQL Query Lab to generate automated bottleneck diagnosis and recommendations.</p></div>
+              </div>
+              <div class="subheading" style="margin-top:14px;padding-top:10px">
+                <div style="font-size:11px;font-weight:700;color:#555d73;margin-bottom:6px">Slowest Queries Observed</div>
+                <div class="slowest-list" id="slowestQueriesList">
+                  <div style="color:#858ba0;font-size:10px">No queries executed yet.</div>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <footer class="page-footer">
+            <span>HyperVision <b>·</b> Complete DBMS, OS/VM Monitoring Platform</span>
+            <span>Status: <i class="status-dot"></i> Connected</span>
+          </footer>
+        </div>
+
+        <!-- 2. SQL QUERY LAB -->
+        <div class="page-view" id="page-query">
+          <section class="page-heading">
+            <div>
+              <div class="eyebrow">DATABASE TOOLS</div>
+              <h1>SQL Query <span>Lab.</span></h1>
+              <p>Execute queries, DDL, DML, and indexes with execution plan inspection.</p>
+            </div>
+            <div class="heading-actions">
+              <button class="button button-quiet" id="clearQuery">Clear editor</button>
+              <button class="button button-primary" id="runQuery">▶ Run query</button>
+            </div>
+          </section>
+
+          <div class="query-layout">
+            <section class="panel editor-panel">
+              <div class="editor-toolbar">
+                <div>
+                  <span class="editor-language-dot"></span>
+                  <strong>SQL Editor</strong>
+                  <span class="tag tag-demo">MINI DBMS FULL SQL</span>
+                </div>
+                <select id="queryPreset" class="select-small">
+                  <option value="custom">Choose example query...</option>
+                  <option value="aggregate">1. Average salary by department (GROUP BY)</option>
+                  <option value="join">2. Orders joined with sales (HASH JOIN)</option>
+                  <option value="filter">3. Filter with AND/OR conditions</option>
+                  <option value="insert">4. INSERT statement</option>
+                  <option value="update">5. UPDATE statement</option>
+                  <option value="delete">6. DELETE statement</option>
+                  <option value="create_index">7. CREATE B-Tree Index</option>
+                </select>
+              </div>
+              <div class="editor-area">
+                <div class="line-numbers" id="lineNumbers">1<br>2<br>3<br>4<br>5</div>
+                <textarea id="sqlEditor" spellcheck="false" aria-label="SQL query editor">SELECT department, AVG(salary) AS avg_salary
+FROM sales
+WHERE salary > 50000
+GROUP BY department
+ORDER BY avg_salary DESC
+LIMIT 10;</textarea>
+              </div>
+              <div class="editor-bottom">
+                <span><kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run</span>
+                <span id="editorCharCount">0 characters</span>
+              </div>
+              <div class="editor-hint">
+                <span>ⓘ</span> Supports SELECT (DISTINCT, WHERE, GROUP BY, HAVING, ORDER BY, LIMIT, JOINs), INSERT, UPDATE, DELETE, and INDEX.
+              </div>
+            </section>
+
+            <section class="panel schema-panel">
+              <div class="panel-heading">
+                <div><h2>Schema browser</h2><p>Tables loaded by Mini DBMS</p></div>
+                <button class="button button-quiet button-sm" id="schemaRefreshBtn">↻ Refresh</button>
+              </div>
+              <div id="schemaBrowserContainer">
+                <div class="schema-tip"><strong>Loading tables…</strong></div>
+              </div>
+            </section>
+          </div>
+
+          <section class="panel results-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Query results</h2>
+                <p id="resultSummary">Run a query to view execution output and metrics</p>
+              </div>
+              <div class="panel-actions">
+                <span id="queryDuration" class="duration-chip">— ms</span>
+                <span id="indexBadge" class="tag tag-demo hidden">INDEX USED</span>
+                <button class="button button-quiet button-sm" id="exportResults">↓ Export CSV</button>
+              </div>
+            </div>
+
+            <div id="queryResultArea" class="result-empty">
+              <div class="empty-icon">⌘</div>
+              <strong>No query executed yet</strong>
+              <p>Type SQL above or select a preset and click "Run query".</p>
+            </div>
+
+            <div class="table-scroll hidden" id="queryResultTableWrap">
+              <table>
+                <thead id="queryResultHead"></thead>
+                <tbody id="queryResultBody"></tbody>
+              </table>
+            </div>
+
+            <div class="plan-preview hidden" id="queryPlan">
+              <div class="plan-title">ACTUAL MINI DBMS EXECUTION PLAN & OPERATOR STATS</div>
+              <div class="plan-steps" id="planSteps"></div>
+            </div>
+
+            <section class="run-envelope hidden" id="runEnvelope">
+              <div>
+                <span class="eyebrow">ACTIVE CONFIGURATION & MEASUREMENT</span>
+                <strong id="runEnvelopeTitle">—</strong>
+                <p id="runEnvelopeDetail">—</p>
+              </div>
+              <div class="run-envelope-metrics" id="runEnvelopeMetrics"></div>
+            </section>
+
+            <section class="panel bottleneck-mini hidden" id="queryBottleneck">
+              <div class="panel-heading">
+                <div><h2>Bottleneck &amp; Diagnostic Analysis</h2><p>Identified bottleneck signals for this execution</p></div>
+                <span class="tag tag-demo" id="queryBottleneckTag">MEASURED</span>
+              </div>
+              <div id="queryBottleneckBody"></div>
+            </section>
+
+            <!-- OPTIMIZATION RECOMMENDATIONS -->
+            <section class="recommendations-panel hidden" id="queryRecommendationsPanel">
+              <div class="rec-panel-header">
+                <div>
+                  <h2>Optimization Recommendations</h2>
+                  <p>Evidence-backed optimizations targeting query latency, CPU time, and memory footprint</p>
+                </div>
+                <div class="rec-panel-actions">
+                  <span class="tag tag-demo" id="recCountBadge">0 RECOMMENDATIONS</span>
+                  <button class="btn-apply-all" id="btnApplyAllRecs">⚡ Apply All Compatible</button>
+                </div>
+              </div>
+              <div class="rec-card-list" id="queryRecCardsList"></div>
+            </section>
+
+            <!-- BEFORE & AFTER PERFORMANCE COMPARISON (Section 14) -->
+            <section class="comparison-container hidden" id="queryComparisonPanel">
+              <div class="comparison-header-row">
+                <div>
+                  <h3 id="compTitle">Before / After Performance Comparison</h3>
+                  <p id="compSubtitle">Side-by-side benchmark verifying latency, CPU time, memory, and result equivalence</p>
+                </div>
+                <div class="panel-actions">
+                  <span class="tag tag-demo" id="compEquivalenceBadge">RESULTS EQUIVALENT (VERIFIED)</span>
+                </div>
+              </div>
+              <div class="comparison-summary-banner" id="compSummaryBanner"></div>
+              <div class="table-scroll">
+                <table class="comparison-table" id="compTable">
+                  <thead>
+                    <tr>
+                      <th>Metric</th>
+                      <th>Before</th>
+                      <th>After</th>
+                      <th>Change</th>
+                      <th>Result</th>
+                    </tr>
+                  </thead>
+                  <tbody id="compTableBody"></tbody>
+                </table>
+              </div>
+              <div class="comparison-meta-grid" id="compMetaGrid"></div>
+            </section>
+          </section>
+        </div>
+
+        <!-- 3. SYSTEM MONITORING -->
+        <div class="page-view" id="page-monitoring">
+          <section class="page-heading">
+            <div>
+              <div class="eyebrow">SYSTEM OBSERVABILITY</div>
+              <h1>System <span>Monitoring.</span></h1>
+              <p>Track live host resource signals and manage virtual machine controls.</p>
+            </div>
+            <div class="heading-actions">
+              <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#6d7488;cursor:pointer">
+                <input type="checkbox" id="autoRefreshMonitor" checked> Auto-refresh (3s)
+              </label>
+              <button class="button button-primary" id="monitorRefresh">↻ Refresh snapshot</button>
+            </div>
+          </section>
+
+          <section class="metric-grid three-metrics">
+            <article class="metric-card">
+              <div class="metric-top"><span>CPU utilization</span><span class="metric-icon orange">⌁</span></div>
+              <div class="metric-value"><span id="monitorCpu">0</span><small>%</small></div>
+              <div class="progress-track"><span id="monitorCpuBar" style="width:0%"></span></div>
+              <div class="metric-foot"><span>psutil system-wide sample</span></div>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-top"><span>Memory utilization</span><span class="metric-icon green">▥</span></div>
+              <div class="metric-value"><span id="monitorMem">0</span><small>%</small></div>
+              <div class="progress-track green-track"><span id="monitorMemBar" style="width:0%"></span></div>
+              <div class="metric-foot"><span id="monitorMemDetail">0 MB used</span></div>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-top"><span>Active threads & processes</span><span class="metric-icon blue">⌘</span></div>
+              <div class="metric-value"><span id="monitorThreads">0</span><small>threads</small></div>
+              <div class="metric-foot"><span id="monitorProcCount">0 OS processes</span></div>
+            </article>
+          </section>
+
+          <section class="panel vm-control-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Virtual machine controls</h2>
+                <p>Configure a target hypervisor, inspect its state, and request resource/lifecycle changes.</p>
+              </div>
+              <span id="vmModeBadge" class="tag tag-warn">DRY-RUN (SIMULATION)</span>
+            </div>
+
+            <div class="vm-config-grid">
+              <label>Backend
+                <select id="vmBackend" class="input-control">
+                  <option value="dryrun">Safe dry-run (simulation)</option>
+                  <option value="xen">Xen / xl</option>
+                  <option value="kvm">KVM / libvirt (virsh)</option>
+                </select>
+              </label>
+              <label>VM name
+                <input id="vmName" class="input-control" value="demo-vm" placeholder="VM domain name">
+              </label>
+              <label>Hypervisor host (optional)
+                <input id="vmHost" class="input-control" placeholder="user@192.168.1.10">
+              </label>
+              <label>Xen config path (start only)
+                <input id="vmConfigPath" class="input-control" placeholder="/etc/xen/my-vm.cfg">
+              </label>
+            </div>
+
+            <div class="vm-actions">
+              <button class="button button-primary" id="vmConfigure">Connect / configure</button>
+              <button class="button button-quiet" id="vmStart">▶ Start VM</button>
+              <button class="button button-quiet" id="vmShutdown">⏻ Graceful shutdown</button>
+              <button class="button button-danger" id="vmForceStop">■ Force stop</button>
+              <button class="button button-quiet" id="vmRestore">Restore previous size</button>
+            </div>
+
+            <div class="vm-resource-grid">
+              <label>vCPUs
+                <input id="vmVcpus" class="input-control" type="number" min="1" max="64" value="2">
+              </label>
+              <label>RAM (MB)
+                <input id="vmMemory" class="input-control" type="number" min="256" max="1048576" step="256" value="2048">
+              </label>
+              <button class="button button-primary" id="vmApplyResources">Apply vCPU / RAM</button>
+              <div class="vm-current-state">
+                <span class="eyebrow">CURRENT VM STATUS</span>
+                <strong id="vmCurrentState">Simulation Ready</strong>
+                <small id="vmCurrentDetails">Dry-run mode active; commands simulate hypervisor changes safely.</small>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;margin-top:14px">
+              <button class="button button-quiet" id="vmVerifyBtn">✓ Verify Configuration</button>
+              <div id="vmVerificationNote" style="font-size:11px;color:#555d73"></div>
+            </div>
+
+            <div class="subheading" style="margin-top:16px;padding-top:14px">
+              <div style="font-weight:700;font-size:12px;color:#353b52;margin-bottom:8px">VM Configuration History</div>
+              <div class="table-scroll" style="max-height:200px">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>TIMESTAMP</th>
+                      <th>ACTION</th>
+                      <th>OLD vCPUs</th>
+                      <th>NEW vCPUs</th>
+                      <th>OLD RAM</th>
+                      <th>NEW RAM</th>
+                      <th>MODE</th>
+                      <th>VERIFIED</th>
+                    </tr>
+                  </thead>
+                  <tbody id="vmHistoryTableBody">
+                    <tr><td colspan="8" style="text-align:center;color:#858ba0">No configuration changes recorded yet.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p class="vm-safety-note">
+              <strong>Notice:</strong> Safe simulation (dry-run) is enabled by default to allow testing without a physical hypervisor. Real Xen/KVM operations require hypervisor tools, permissions, and explicit user confirmation for potentially disruptive actions.
+            </p>
+          </section>
+
+          <section class="dashboard-grid">
+            <article class="panel performance-panel">
+              <div class="panel-heading">
+                <div><h2>Resource utilization history</h2><p>Host measurements from psutil</p></div>
+                <div class="panel-actions">
+                  <span class="legend-dot purple-dot"></span><span class="legend-label">CPU %</span>
+                  <span class="legend-dot blue-dot"></span><span class="legend-label">Memory %</span>
+                </div>
+              </div>
+              <div class="chart-wrap">
+                <div class="y-axis"><span>100%</span><span>75%</span><span>50%</span><span>25%</span><span>0%</span></div>
+                <div class="chart-main">
+                  <div class="chart-gridlines"><i></i><i></i><i></i><i></i><i></i></div>
+                  <svg id="resourceChart" viewBox="0 0 700 230" preserveAspectRatio="none" role="img" aria-label="Resource utilization chart"></svg>
+                  <div class="x-axis"><span>-60s</span><span>-45s</span><span>-30s</span><span>-15s</span><span>Now</span></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading"><div><h2>Environment status</h2><p>Detected monitoring sources</p></div></div>
+              <div class="source-row">
+                <div class="source-icon">OS</div>
+                <div class="source-info"><strong>Operating system</strong><small>Real host metrics via psutil</small></div>
+                <span class="tag tag-demo">LIVE</span>
+              </div>
+              <div class="source-row">
+                <div class="source-icon">VM</div>
+                <div class="source-info"><strong>Virtual machine</strong><small id="vmEnvLabel">Simulation mode (Dry-run)</small></div>
+                <span class="tag tag-warn" id="vmEnvTag">SIMULATED</span>
+              </div>
+              <div class="source-row">
+                <div class="source-icon">VMI</div>
+                <div class="source-info"><strong>VM introspection</strong><small>Simulated VMI adapter</small></div>
+                <span class="tag tag-muted">SIMULATED</span>
+              </div>
+              <div class="schema-tip">
+                <strong>Source Transparency</strong>
+                <p>OS and process metrics are real host observations. VM/VMI controls use honest simulation on standard development machines without Xen.</p>
+              </div>
+            </article>
+          </section>
+
+          <section class="panel table-panel">
+            <div class="panel-heading">
+              <div><h2>Process monitor</h2><p>Live host processes sampled via psutil</p></div>
+              <span class="tag tag-demo">HOST METRICS</span>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th>PROCESS</th><th>PID</th><th>CPU</th><th>MEMORY</th><th>SOURCE</th></tr></thead>
+                <tbody id="processTableBody"><tr><td colspan="5">Loading processes…</td></tr></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- 4. DATABASE EXPLORER -->
+        <div class="page-view" id="page-database">
+          <section class="page-heading">
+            <div>
+              <div class="eyebrow">DATA MANAGEMENT</div>
+              <h1>Database <span>Explorer.</span></h1>
+              <p>Explore tables and manage indexes for fast equality and range lookups.</p>
+            </div>
+            <div class="heading-actions">
+              <button class="button button-primary" data-goto="query">Open SQL editor ↗</button>
+            </div>
+          </section>
+
+          <!-- Tables & Table Detail -->
+          <div class="database-grid">
+            <section class="panel">
+              <div class="panel-heading">
+                <div><h2>Tables</h2><p>Loaded database tables</p></div>
+                <span class="tag tag-demo">IN-MEMORY</span>
+              </div>
+              <div id="dbTablesList"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <div>
+                  <h2 id="tableDetailTitle">sales</h2>
+                  <p id="tableDetailSubtitle">Table structure and sample records</p>
+                </div>
+                <button class="button button-quiet button-sm" id="tableUseQuery">Use in SQL editor</button>
+              </div>
+              <div class="table-scroll" style="max-height: 280px">
+                <table>
+                  <thead id="dbTableHead"></thead>
+                  <tbody id="dbTableBody"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <!-- INDEX MANAGER -->
+          <section class="panel db-subpanel">
+            <div class="panel-heading">
+              <div>
+                <h2>Database Indexes</h2>
+                <p>Manage Hash and B-Tree indexes for fast equality and range lookups</p>
+              </div>
+              <span class="tag tag-demo">ACTIVE ENGINE</span>
+            </div>
+
+            <!-- Create Index Form -->
+            <form id="createIndexForm" class="grid-form">
+              <label>Table
+                <select id="indexTableSelect" required></select>
+              </label>
+              <label>Column
+                <input id="indexColumnInput" placeholder="e.g. salary" required>
+              </label>
+              <label>Type
+                <select id="indexTypeSelect">
+                  <option value="BTREE">B-Tree (Equality & Range: &gt;, &lt;, =)</option>
+                  <option value="HASH">Hash (O(1) Equality only)</option>
+                </select>
+              </label>
+              <label>Index Name (optional)
+                <input id="indexNameInput" placeholder="auto-generated">
+              </label>
+              <button type="submit" class="action-btn primary" style="height:32px">＋ Create Index</button>
+            </form>
+
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th>INDEX NAME</th><th>TABLE</th><th>COLUMN</th><th>TYPE</th><th>ENTRIES</th><th>ACTION</th></tr></thead>
+                <tbody id="indexesTableBody">
+                  <tr><td colspan="6" style="text-align:center;color:#858ba0">No indexes created yet.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- 5. BOTTLENECK ANALYSIS -->
+        <div class="page-view" id="page-analysis">
+          <section class="page-heading">
+            <div>
+              <div class="eyebrow">DIAGNOSTICS</div>
+              <h1>Bottleneck <span>Analysis.</span></h1>
+              <p>Rule-based bottleneck classification and evidence-backed optimization recommendations.</p>
+            </div>
+            <div class="heading-actions">
+              <button class="button button-primary" id="analyzeBtn">✳ Refresh analysis</button>
+            </div>
+          </section>
+
+          <section class="panel analysis-score" style="margin-bottom:18px">
+            <div>
+              <span class="eyebrow">PRIMARY CLASSIFICATION</span>
+              <h2 id="analysisPrimaryClassTitle">No query analysed yet</h2>
+              <p id="analysisPrimaryClassDesc">Run a query in the SQL Query Lab to generate a bottleneck diagnosis.</p>
+            </div>
+          </section>
+
+          <!-- Findings & Recommendations -->
+          <section class="panel findings-panel">
+            <div class="panel-heading">
+              <div><h2>Bottleneck Findings &amp; Actionable Recommendations</h2><p>Evidence-backed suggestions for CPU, RAM, and latency</p></div>
+              <select class="select-small" id="findingFilter">
+                <option value="all">All findings</option>
+                <option value="high">High priority</option>
+                <option value="medium">Medium priority</option>
+              </select>
+            </div>
+            <div id="findingsList"></div>
+            <div id="bottleneckDetails"></div>
+          </section>
+        </div>
+
+        <!-- 6. PERFORMANCE EXPERIMENTS -->
+        <div class="page-view" id="page-experiments">
+          <section class="page-heading">
+            <div>
+              <div class="eyebrow">BENCHMARKING &amp; OPTIMIZATION</div>
+              <h1>Performance <span>Experiments.</span></h1>
+              <p>Compare baseline vs optimized executions, run workloads, benchmark indexes, and verify result equivalence.</p>
+            </div>
+            <div class="heading-actions">
+              <button class="button button-quiet" id="exportExperiments">↓ Export CSV</button>
+              <button class="button button-primary" id="runWorkloadBtn">▶ Run Test Workload</button>
+            </div>
+          </section>
+
+          <div class="metric-grid three-metrics">
+            <article class="metric-card">
+              <div class="metric-top"><span>Total experiments</span><span class="metric-icon purple">⇄</span></div>
+              <div class="metric-value" id="experimentCount">0</div>
+              <div class="metric-foot"><span>Saved execution runs</span></div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-top"><span>Best sample latency</span><span class="metric-icon green">↘</span></div>
+              <div class="metric-value" id="bestLatency">—</div>
+              <div class="metric-foot"><span>Fastest recorded query</span></div>
+            </article>
+            <article class="metric-card">
+              <div class="metric-top"><span>Result verification</span><span class="metric-icon blue">✓</span></div>
+              <div class="metric-value" id="equivalenceStatus">—</div>
+              <div class="metric-foot"><span>Hash fingerprint match</span></div>
+            </article>
+          </div>
+
+          <!-- INDEX BENCHMARK PANEL -->
+          <section class="panel">
+            <div class="panel-heading">
+              <div><h2>Index Performance Benchmark</h2><p>Benchmark query execution with vs without index and verify result equivalence</p></div>
+              <span class="tag tag-demo">A/B BENCHMARK</span>
+            </div>
+            <div class="grid-form" style="margin-bottom:8px">
+              <label>Target Table
+                <select id="benchmarkTableSelect"></select>
+              </label>
+              <label>Column to Index
+                <input id="benchmarkColumnInput" value="salary" placeholder="Column name">
+              </label>
+              <label>Index Type
+                <select id="benchmarkTypeSelect">
+                  <option value="BTREE">B-Tree</option>
+                  <option value="HASH">Hash</option>
+                </select>
+              </label>
+              <label style="grid-column: span 2">SQL Query
+                <input id="benchmarkSqlInput" value="SELECT * FROM sales WHERE salary > 90000">
+              </label>
+              <button type="button" class="action-btn primary" id="btnRunIndexBenchmark" style="height:32px">⚡ Benchmark Index</button>
+            </div>
+            <div id="indexBenchmarkResultArea"></div>
+          </section>
+
+          <!-- Compare Two Saved Experiments -->
+          <section class="panel">
+            <div class="panel-heading">
+              <div><h2>Compare Two Saved Experiments</h2><p>Compare latency, CPU time, memory, settings, and result equivalence between runs.</p></div>
+            </div>
+            <div class="compare-controls">
+              <label>Baseline / Before
+                <select id="compareBefore" class="input-control"></select>
+              </label>
+              <label>Candidate / After
+                <select id="compareAfter" class="input-control"></select>
+              </label>
+              <button class="button button-primary" id="compareExperimentsBtn">Compare experiments</button>
+            </div>
+            <div id="experimentComparisonResult" class="comparison-result">
+              <div class="result-empty"><strong>No comparison yet</strong><p>Select two experiment IDs and click Compare experiments.</p></div>
+            </div>
+          </section>
+
+          <!-- Experiment History Table -->
+          <section class="panel">
+            <div class="panel-heading">
+              <div><h2>Experiment History</h2><p>Saved query executions with metrics, bottleneck classifications, and resource configurations.</p></div>
+              <div class="panel-actions">
+                <select class="select-small" id="experimentFilter">
+                  <option value="all">All experiments</option>
+                  <option value="complete">Completed</option>
+                </select>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th>EXPERIMENT</th><th>QUERY</th><th>CONFIGURATION</th><th>LATENCY</th><th>BOTTLENECK</th><th>RESULT CHECK</th></tr></thead>
+                <tbody id="experimentsBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- 7. SETTINGS -->
+        <div class="page-view" id="page-settings">
+          <section class="page-heading">
+            <div><div class="eyebrow">PREFERENCES</div><h1>Workspace <span>Settings.</span></h1><p>Engine configuration and platform information.</p></div>
+          </section>
+          <section class="panel settings-panel">
+            <div class="setting-row">
+              <div><strong>Mini DBMS Query Engine</strong><p>Fully functional SQL query processor with tokenizer, recursive-descent parser, and executor.</p></div>
+              <span class="tag tag-demo">ACTIVE</span>
+            </div>
+            <div class="setting-row">
+              <div><strong>Database Indexing</strong><p>Hash and B-Tree indexes integrated with query optimizer (predicate pushdown & index scan).</p></div>
+              <span class="tag tag-demo">ACTIVE</span>
+            </div>
+            <div class="setting-row">
+              <div><strong>Bottleneck Classifier</strong><p>Rule-based diagnosis of CPU, memory, and latency bottlenecks from measured execution data.</p></div>
+              <span class="tag tag-demo">ACTIVE</span>
+            </div>
+            <div class="setting-row">
+              <div><strong>Operating System Monitoring</strong><p>psutil real host metrics (CPU, RAM, threads, processes).</p></div>
+              <span class="tag tag-demo">LIVE</span>
+            </div>
+            <div class="setting-row">
+              <div><strong>VM / VMI Monitoring</strong><p>Xen / KVM controller with safe dry-run simulation mode on standard laptops.</p></div>
+              <span class="tag tag-warn">DRY-RUN READY</span>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="modal-backdrop hidden" id="modalBackdrop">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">×</button>
+      <div class="modal-symbol">✳</div>
+      <h2 id="modalTitle">Modal</h2>
+      <p id="modalMessage">Information message.</p>
+      <button class="button button-primary" id="modalOk">OK</button>
+    </div>
+  </div>
+
+  <!-- Review & Edit SQL Optimization Modal (Section 12, 13) -->
+  <div class="modal-backdrop hidden" id="sqlEditModalBackdrop">
+    <div class="modal sql-edit-modal-wrap">
+      <button class="modal-close" id="sqlEditModalClose">×</button>
+      <div class="modal-symbol">⌘</div>
+      <h2 style="font-size:16px;margin-bottom:6px">Review &amp; Edit SQL Optimization</h2>
+      <p style="text-align:left;font-size:11px;color:#6b728a;margin-bottom:12px">
+        HyperVision analyzes table size and selectivity. Applying a more selective WHERE filter reduces rows scanned, lowering CPU time, RAM usage, and latency.
+      </p>
+      <div class="sql-edit-diff-box">
+        <div style="font-size:10px;font-weight:700;color:#787e95;margin-bottom:4px">ORIGINAL SQL QUERY</div>
+        <pre id="modalOriginalSql" style="margin:0;font-family:ui-monospace,Consolas,monospace;font-size:11px;color:#4f556b;white-space:pre-wrap"></pre>
+      </div>
+      <div style="text-align:left">
+        <div style="font-size:10px;font-weight:700;color:#5c50a6;margin-bottom:4px">PROPOSED OPTIMIZED SQL (REVIEW &amp; EDIT BEFORE EXECUTION)</div>
+        <textarea id="modalProposedSql" class="sql-edit-textarea" rows="4" spellcheck="false"></textarea>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px">
+        <button class="button button-quiet" id="modalCancelSqlEdit">Cancel</button>
+        <button class="button button-primary" id="modalExecuteSqlEdit">▶ Execute Edited SQL &amp; Benchmark</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js?v=2"></script>
+  <script src="js/app.js?v=2"></script>
+</body>
+</html>
