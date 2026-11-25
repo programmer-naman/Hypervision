@@ -1,6 +1,6 @@
 
 # 🚀 HyperVision
-### Intelligent DBMS Performance Monitoring, Bottleneck Analysis & VM Resource Optimization Platform
+### DBMS Performance Monitoring, Bottleneck Analysis & VM Resource Optimization Platform
 
 HyperVision is an integrated database performance analysis and optimization platform that combines a Mini Database Management System (Mini DBMS), Operating System resource monitoring, bottleneck detection, virtual machine resource management, and performance experimentation.
 
@@ -118,98 +118,6 @@ Features:
 - Maintain VM configuration history.
 
 **Note:** Dry-run mode is enabled by default. It simulates VM configuration changes without modifying an actual virtual machine. Real Xen and KVM operations require a supported hypervisor environment and appropriate permissions.
-
----
-
-## 🏗️ System Architecture
-
-```text
-                    HyperVision
-                         |
-             +-----------+-----------+
-             |                       |
-        Web Dashboard           Terminal CLI
-             |                       |
-             +-----------+-----------+
-                         |
-                    Flask API
-                         |
-          +--------------+--------------+
-          |              |              |
-       Mini DBMS     Experiment      VM Controller
-          |           Manager            |
-          |              |               |
-       SQL Engine    Resource         Xen / KVM /
-       Optimizer     Monitoring       Dry-run
-       Indexing          |
-          |          Bottleneck
-          |           Analysis
-          |              |
-          +------- Performance
-                    Comparison
-                         |
-                  Experiment History
-```
-
----
-
-## 📂 Project Structure
-
-```text
-HyperVision/
-│
-├── backend/
-│   ├── mini_dbms/
-│   │   ├── parser.py
-│   │   ├── executor.py
-│   │   ├── operators.py
-│   │   ├── optimizer.py
-│   │   ├── indexes.py
-│   │   ├── storage.py
-│   │   └── settings.py
-│   │
-│   ├── monitor/
-│   │   ├── resource_monitor.py
-│   │   └── vmi_adapter.py
-│   │
-│   ├── vm/
-│   │   └── controller.py
-│   │
-│   ├── experiments/
-│   │   └── experiment_manager.py
-│   │
-│   ├── analysis/
-│   │   ├── classifier.py
-│   │   ├── recommender.py
-│   │   ├── correlator.py
-│   │   └── comparator.py
-│   │
-│   ├── cli/
-│   ├── data/
-│   └── web_app.py
-│
-├── frontend/
-│   ├── index.html
-│   ├── css/
-│   │   └── styles.css
-│   └── js/
-│       ├── app.js
-│       └── data.js
-│
-├── sample_data/
-│   ├── sales.csv
-│   └── orders.csv
-│
-├── logs/
-│   └── experiments.json
-│
-├── tests/
-│
-├── requirements.txt
-├── TEAM_SPLIT.md
-├── run.py
-└── README.md
-```
 
 ---
 
