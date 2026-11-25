@@ -89,3 +89,5 @@ python run.py
 Keep working in your own area, in a branch named `feature/<what-you-do>`, and open a pull request.
 If you need a change in someone else's file, ask them (or open an issue) instead of editing it —
 that's what keeps the history conflict-free.
+f editing it —
+that's what keeps the history conflict-free.
