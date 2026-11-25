@@ -1,8 +1,5 @@
 # Team split and GitHub workflow
 
-One repository, three people, no overlapping files — so nobody ever has a
-merge conflict. Every commit is made by the person who owns that file.
-
 ## Who owns what
 
 | | Person 1 — **Database engine** | Person 2 — **Monitoring & analysis** | Person 3 — **Experiments, terminal UI, docs** |
